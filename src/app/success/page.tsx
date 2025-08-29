@@ -2,11 +2,11 @@
 
 import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { CheckCircle, Shield, Copy, ExternalLink, Award, Coins, Home } from 'lucide-react'
+import { CheckCircle, Copy, ExternalLink, Award, Coins, Home } from 'lucide-react'
 import Link from 'next/link'
+import { PageLayout } from '@/components/common'
 
 function SuccessContent() {
   const searchParams = useSearchParams()
@@ -32,18 +32,7 @@ function SuccessContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
-      <header className="container mx-auto px-4 py-6">
-        <nav className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Shield className="h-8 w-8 text-purple-600" />
-            <span className="text-2xl font-bold text-gray-900">AI Creator Protocol</span>
-          </div>
-          <ConnectButton />
-        </nav>
-      </header>
-
-      <main className="container mx-auto px-4 py-8">
+    <PageLayout variant="light" headerVariant="simple">
         <div className="max-w-4xl mx-auto">
           {/* 成功提示 */}
           <div className="text-center mb-8">
@@ -234,8 +223,7 @@ function SuccessContent() {
             </p>
           </div>
         </div>
-      </main>
-    </div>
+    </PageLayout>
   )
 }
 

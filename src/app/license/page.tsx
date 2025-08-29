@@ -2,11 +2,10 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Shield, ArrowLeft, Zap, Award, Coins } from 'lucide-react'
-import Link from 'next/link'
+import { Zap, Award, Coins } from 'lucide-react'
+import { PageLayout } from '@/components/common'
 import { LicenseAI } from '@/lib/ai-assistant'
 import { ContentScorer } from '@/lib/scoring'
 import { AIQuestion, LicenseTerms } from '@/types'
@@ -116,26 +115,14 @@ function LicenseContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
-      <header className="container mx-auto px-4 py-6">
-        <nav className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link href="/upload">
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                返回上传
-              </Button>
-            </Link>
-            <div className="flex items-center space-x-2">
-              <Shield className="h-8 w-8 text-purple-600" />
-              <span className="text-2xl font-bold text-gray-900">授权设置</span>
-            </div>
-          </div>
-          <ConnectButton />
-        </nav>
-      </header>
-
-      <main className="container mx-auto px-4 py-8">
+    <PageLayout 
+      variant="light" 
+      headerVariant="simple" 
+      headerTitle="授权设置"
+      showBackButton
+      backHref="/upload"
+      backText="返回上传"
+    >
         <div className="max-w-4xl mx-auto">
           {/* 内容信息卡片 */}
           <Card className="mb-8">
@@ -305,8 +292,7 @@ function LicenseContent() {
             )
           )}
         </div>
-      </main>
-    </div>
+    </PageLayout>
   )
 }
 
