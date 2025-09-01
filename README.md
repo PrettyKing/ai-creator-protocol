@@ -42,20 +42,7 @@ AI Creator Protocol 是一个创新的Web3创作者经济平台，帮助社交�
 - **AI**: OpenAI GPT-4 API
 - **存储**: IPFS (Pinata)
 
-## 🏁 快速开始
-
-### 1. 克隆项目
-```bash
-git clone https://github.com/PrettyKing/ai-creator-protocol.git
-cd ai-creator-protocol
-```
-
-### 2. 安装依赖
-```bash
-npm install
-```
-
-### 3. 环境配置
+## 环境配置
 创建 `.env.local` 文件：
 ```env
 # OpenAI API Key (用于AI授权助手)
