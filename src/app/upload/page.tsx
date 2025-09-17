@@ -2,14 +2,16 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAccount } from 'wagmi'
 import { Button } from '@/components/ui/button'
-import { Upload, Link2, FileImage, Video, Sparkles, Zap } from 'lucide-react'
+import { Upload, Link2, FileImage, Video, Sparkles, Zap, Wallet } from 'lucide-react'
 import { PageLayout } from '@/components/common'
 import { ContentMetadata, SocialMetrics } from '@/types'
 import { ContentScorer } from '@/lib/scoring'
 
 export default function UploadPage() {
   const router = useRouter()
+  const { address, isConnected } = useAccount()
   const [contentType, setContentType] = useState<'file' | 'social-link' | null>(null)
   const [file, setFile] = useState<File | null>(null)
   const [socialUrl, setSocialUrl] = useState('')
@@ -17,35 +19,55 @@ export default function UploadPage() {
   const [description, setDescription] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
 
-  // 模拟社交媒体数据解析
-  const handleSocialUrlSubmit = () => {
+  // 调用社交媒体数据解析API
+  const handleSocialUrlSubmit = async () => {
     if (!socialUrl.trim()) return
     
-    // 这里应该调用API解析社交媒体链接
-    // 现在使用模拟数据
-    const mockMetrics: SocialMetrics = {
-      followers: 50000,
-      views: 120000,
-      likes: 8500,
-      comments: 320,
-      shares: 180,
-      platform: 'tiktok'
+    setIsProcessing(true)
+    
+    try {
+      const response = await fetch('/api/social/parse', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ socialUrl }),
+      })
+
+      if (!response.ok) {
+        throw new Error('解析失败')
+      }
+
+      const result = await response.json()
+      
+      if (!result.success) {
+        throw new Error(result.error?.message || '数据解析失败')
+      }
+
+      const metrics: SocialMetrics = result.data
+      const score = ContentScorer.calculateScore(metrics)
+      const grade = ContentScorer.getScoreGrade(score)
+    
+      // 跳转到授权设置页面，携带数据
+      const queryParams = new URLSearchParams({
+        contentType: 'social-link',
+        socialUrl,
+        title: title || '来自社交媒体的内容',
+        description: description || '',
+        score: score.toString(),
+        grade: grade.grade,
+        socialMetrics: JSON.stringify(metrics),
+        creator: address || ''
+      })
+      
+      router.push(`/license?${queryParams.toString()}`)
+      
+    } catch (error) {
+      console.error('社交媒体解析失败:', error)
+      alert(error instanceof Error ? error.message : '解析失败，请检查链接格式')
+    } finally {
+      setIsProcessing(false)
     }
-    
-    const score = ContentScorer.calculateScore(mockMetrics)
-    const grade = ContentScorer.getScoreGrade(score)
-    
-    // 跳转到授权设置页面，携带数据
-    const queryParams = new URLSearchParams({
-      contentType: 'social-link',
-      socialUrl,
-      title: title || '来自社交媒体的内容',
-      description: description || '',
-      score: score.toString(),
-      grade: grade.grade
-    })
-    
-    router.push(`/license?${queryParams.toString()}`)
   }
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,28 +80,64 @@ export default function UploadPage() {
     }
   }
 
-  const handleFileSubmit = () => {
+  const handleFileSubmit = async () => {
     if (!file || !title.trim()) return
-    
+
+    // 检查钱包连接状态
+    if (!isConnected) {
+      alert('请先连接钱包')
+      return
+    }
+
     setIsProcessing(true)
-    
-    // 模拟文件处理和评分
-    setTimeout(() => {
+
+    try {
+      // 上传文件到IPFS
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('title', title)
+      formData.append('description', description)
+      formData.append('creator', address || '')
+
+      const response = await fetch('/api/upload/ipfs', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error('文件上传失败')
+      }
+
+      const result = await response.json()
+
+      if (!result.success) {
+        throw new Error(result.error?.message || '文件上传失败')
+      }
+
       // 文件上传通常有基础分数
       const baseScore = Math.floor(Math.random() * 30) + 20 // 20-50分
       const grade = ContentScorer.getScoreGrade(baseScore)
-      
+
       const queryParams = new URLSearchParams({
         contentType: 'file',
         fileName: file.name,
         title,
         description: description || '',
         score: baseScore.toString(),
-        grade: grade.grade
+        grade: grade.grade,
+        contentHash: result.data.fileHash,
+        metadataHash: result.data.metadataHash,
+        creator: address || ''
       })
-      
+
       router.push(`/license?${queryParams.toString()}`)
-    }, 2000)
+
+    } catch (error) {
+      console.error('文件上传失败:', error)
+      alert(error instanceof Error ? error.message : '文件上传失败，请重试')
+    } finally {
+      setIsProcessing(false)
+    }
   }
 
   return (
@@ -98,6 +156,23 @@ export default function UploadPage() {
           <div className="inline-flex items-center px-4 py-2 bg-blue-500/10 backdrop-blur-sm rounded-full border border-blue-500/20 shadow-lg mb-6">
             <Sparkles className="w-4 h-4 text-blue-400 mr-2" />
             <span className="text-sm font-medium text-blue-300">内容资产化</span>
+          </div>
+
+          {/* 钱包连接状态 */}
+          <div className="mb-6">
+            {isConnected ? (
+              <div className="inline-flex items-center px-4 py-2 bg-green-500/10 backdrop-blur-sm rounded-full border border-green-500/20 shadow-lg">
+                <Wallet className="w-4 h-4 text-green-400 mr-2" />
+                <span className="text-sm font-medium text-green-300">
+                  钱包已连接: {address?.slice(0, 6)}...{address?.slice(-4)}
+                </span>
+              </div>
+            ) : (
+              <div className="inline-flex items-center px-4 py-2 bg-red-500/10 backdrop-blur-sm rounded-full border border-red-500/20 shadow-lg">
+                <Wallet className="w-4 h-4 text-red-400 mr-2" />
+                <span className="text-sm font-medium text-red-300">请先连接钱包</span>
+              </div>
+            )}
           </div>
           
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">

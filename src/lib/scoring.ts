@@ -45,10 +45,12 @@ export class ContentScorer {
       tiktok: 1.2,        // 抖音传播力强
       xiaohongshu: 1.1,   // 小红书质量较高
       instagram: 1.0,     // Instagram标准权重
+      weibo: 1.1,         // 微博权重
+      bilibili: 1.15,     // B站质量较高
       other: 0.9          // 其他平台略低
     };
-    
-    return platformWeights[platform];
+
+    return platformWeights[platform] || platformWeights.other;
   }
   
   // 根据分数获取奖励代币数量

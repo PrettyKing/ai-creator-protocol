@@ -1,15 +1,7 @@
-import OpenAI from 'openai';
 import { AIQuestion, LicenseTerms } from '@/types';
 
 export class LicenseAI {
-  private openai: OpenAI;
-  
-  constructor() {
-    this.openai = new OpenAI({
-      apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-      dangerouslyAllowBrowser: true // 注意：生产环境应该通过API路由处理
-    });
-  }
+  // 移除客户端OpenAI实例，改用API路由
   
   // AI问答流程
   static getQuestions(): AIQuestion[] {
@@ -61,59 +53,26 @@ export class LicenseAI {
   
   // 根据用户回答生成授权条款
   async generateLicenseTerms(answers: Record<string, any>): Promise<LicenseTerms> {
-    const prompt = `
-    作为专业的版权授权顾问，请根据以下用户偏好生成标准的授权条款：
-    
-    用户回答：
-    ${JSON.stringify(answers, null, 2)}
-    
-    请分析用户意图并返回JSON格式的授权条款，包含以下字段：
-    - commercialUse: boolean (是否允许商业使用)
-    - derivatives: boolean (是否允许二次创作)
-    - attribution: boolean (是否需要署名)
-    - shareAlike: boolean (是否要求相同方式共享)
-    - territory: string[] (适用地区数组)
-    - channels: string[] (允许使用渠道数组)
-    - timeframe: number (授权期限，单位：月，0表示永久)
-    - royalty: number (版税百分比，0-100)
-    
-    请确保返回有效的JSON格式。
-    `;
-    
     try {
-      const response = await this.openai.chat.completions.create({
-        model: 'gpt-4',
-        messages: [
-          {
-            role: 'system',
-            content: '你是一个专业的知识产权授权专家，擅长将用户需求转化为标准的授权条款。'
-          },
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
-        temperature: 0.3,
-        max_tokens: 1000
+      const response = await fetch('/api/ai/generate-license', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ answers }),
       });
-      
-      const content = response.choices[0]?.message?.content;
-      if (!content) {
-        throw new Error('AI返回内容为空');
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const data = await response.json();
       
-      // 解析JSON响应
-      const licenseTerms = JSON.parse(content) as LicenseTerms;
-      
-      // 验证必要字段
-      const requiredFields = ['commercialUse', 'derivatives', 'attribution', 'territory', 'channels', 'timeframe'];
-      for (const field of requiredFields) {
-        if (licenseTerms[field as keyof LicenseTerms] === undefined) {
-          throw new Error(`缺少必要字段: ${field}`);
-        }
+      if (data.error) {
+        throw new Error(data.error);
       }
-      
-      return licenseTerms;
+
+      return data.licenseTerms;
       
     } catch (error) {
       console.error('AI生成授权条款失败:', error);

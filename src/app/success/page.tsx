@@ -24,30 +24,40 @@ function SuccessContent() {
   }
 
   const gradeColors = {
-    S: 'text-yellow-600',
-    A: 'text-green-600', 
-    B: 'text-blue-600',
-    C: 'text-orange-600',
-    D: 'text-gray-600'
+    S: 'text-yellow-400',
+    A: 'text-green-400',
+    B: 'text-blue-400',
+    C: 'text-orange-400',
+    D: 'text-slate-400'
   }
 
   return (
-    <PageLayout variant="light" headerVariant="simple">
+    <PageLayout
+      variant="cyberpunk"
+      headerVariant="main"
+      headerTitle="注册成功"
+      headerSubtitle="Registration Complete"
+      showBackButton
+      backHref="/"
+      backText="返回首页"
+    >
         <div className="max-w-4xl mx-auto">
           {/* 成功提示 */}
           <div className="text-center mb-8">
-            <CheckCircle className="h-24 w-24 text-green-600 mx-auto mb-6" />
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full shadow-lg mb-6">
+              <CheckCircle className="h-12 w-12 text-white" />
+            </div>
+            <h1 className="text-4xl font-bold text-white mb-4">
               🎉 版权注册成功！
             </h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-blue-200/80">
               你的内容已成功注册为链上IP资产，开启版权保护与变现之旅
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 mb-8">
             {/* 内容信息 */}
-            <Card>
+            <Card className="bg-slate-800/50 backdrop-blur-sm border-blue-500/20">
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Award className="h-6 w-6 mr-2 text-purple-600" />

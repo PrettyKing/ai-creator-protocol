@@ -114,12 +114,20 @@ export default function Home() {
                 处理中
               </button>
             </div>
-            <Link href="/upload">
-              <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105">
-                <Upload className="w-4 h-4 mr-2" />
-                上传内容
-              </Button>
-            </Link>
+            <div className="flex items-center space-x-4">
+              <Link href="/dashboard">
+                <Button variant="outline" className="bg-slate-700/50 hover:bg-slate-600/50 text-blue-300 hover:text-white border-blue-500/30 hover:border-blue-400/50">
+                  <Database className="w-4 h-4 mr-2" />
+                  我的资产
+                </Button>
+              </Link>
+              <Link href="/upload">
+                <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105">
+                  <Upload className="w-4 h-4 mr-2" />
+                  上传内容
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
         

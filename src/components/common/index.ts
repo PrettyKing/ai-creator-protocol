@@ -1,5 +1,6 @@
 export { AppHeader } from './AppHeader'
 export { CyberpunkBackground } from './CyberpunkBackground'
+export { CyberpunkCard } from './CyberpunkCard'
 export { PageLayout } from './PageLayout'
 export { StatsCard } from './StatsCard'
 export { ContentCard } from './ContentCard'

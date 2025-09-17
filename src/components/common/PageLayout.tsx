@@ -46,7 +46,7 @@ export function PageLayout({
         backText={backText}
       />
 
-      <main className={`${variant === 'cyberpunk' ? 'relative z-10 ' : ''}container mx-auto px-6 py-8 flex-1`}>
+      <main className={`${variant === 'cyberpunk' ? 'relative z-10 ' : ''}container mx-auto px-6 py-8 flex-1 ${headerVariant === 'main' ? 'pt-24' : 'pt-8'}`}>
         {children}
       </main>
 
