@@ -57,16 +57,33 @@ export default function DashboardPage() {
   const loadUserAssets = async () => {
     setLoading(true)
     try {
-      // 调用真实API获取用户资产
-      const response = await fetch(`/api/assets?creator=${address}`)
+      // 调用数据库API获取用户资产
+      const response = await fetch(`/api/database/assets?creator=${address}`)
       const result = await response.json()
 
-      if (result.success) {
-        setAssets(result.data.assets)
+      if (result.success && result.data) {
+        // 将数据库数据转换为组件所需格式
+        const dbAssets = result.data.assets.map((asset: any) => ({
+          id: asset.id,
+          title: asset.title,
+          description: asset.description || '',
+          contentType: asset.content_type || 'unknown',
+          status: asset.status,
+          createdAt: asset.created_at,
+          txHash: asset.tx_hash || '',
+          ipAssetId: asset.ip_asset_id || '',
+          contractAddress: asset.contract_address || '',
+          contentScore: asset.content_score || 0,
+          rewardAmount: 0, // TODO: 从earnings表计算
+          views: Math.floor(Math.random() * 5000), // 模拟数据，后续从实际来源获取
+          earnings: Math.floor(Math.random() * 100) // 模拟数据，后续从earnings表获取
+        }))
+
+        setAssets(dbAssets)
         setStats(result.data.stats)
       } else {
-        // 如果API调用失败，使用模拟数据
-        console.warn('API调用失败，使用模拟数据')
+        // 如果数据库API调用失败，使用模拟数据
+        console.warn('数据库API调用失败，使用模拟数据', result.error)
         const mockAssets: IPAsset[] = [
         {
           id: '1',

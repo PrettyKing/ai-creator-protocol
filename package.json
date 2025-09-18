@@ -18,6 +18,7 @@
     "@rainbow-me/rainbowkit": "^2.0.0",
     "@story-protocol/core-sdk": "^1.4.0-rc.2",
     "@story-protocol/react": "^0.0.1-beta.9",
+    "@supabase/supabase-js": "^2.57.4",
     "@tanstack/react-query": "^5.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
