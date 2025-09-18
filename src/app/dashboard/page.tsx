@@ -52,7 +52,7 @@ export default function DashboardPage() {
     if (isConnected && address) {
       loadUserAssets()
     }
-  }, [isConnected, address])
+  }, [isConnected, address]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadUserAssets = async () => {
     setLoading(true)

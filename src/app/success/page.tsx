@@ -229,7 +229,7 @@ function SuccessContent() {
           <div className="mt-8 text-center text-gray-600">
             <p className="mb-2">🎉 分享这个好消息给朋友们吧！</p>
             <p className="text-sm">
-              "我刚在 AI Creator Protocol 完成了内容版权注册，获得了 {reward} 个代币奖励！"
+              &ldquo;我刚在 AI Creator Protocol 完成了内容版权注册，获得了 {reward} 个代币奖励！&rdquo;
             </p>
           </div>
         </div>
