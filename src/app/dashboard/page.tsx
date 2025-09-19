@@ -19,27 +19,18 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { PageLayout } from '@/components/common'
-
-interface IPAsset {
-  id: string
-  title: string
-  description: string
-  contentType: string
-  status: 'completed' | 'processing' | 'failed'
-  createdAt: string
-  txHash: string
-  ipAssetId: string
-  contractAddress: string
-  contentScore: number
-  rewardAmount: number
-  views?: number
-  earnings?: number
-}
+import { useUser, useAssets, useSocialIntegrations } from '@/hooks/useDatabase'
 
 export default function DashboardPage() {
   const { address, isConnected } = useAccount()
-  const [assets, setAssets] = useState<IPAsset[]>([])
-  const [loading, setLoading] = useState(false)
+  const { user, loading: userLoading } = useUser()
+  const {
+    assets: dbAssets,
+    loading: assetsLoading,
+    refetch: refetchAssets
+  } = useAssets(user?.id)
+  const { integrations } = useSocialIntegrations(user?.id)
+
   const [stats, setStats] = useState({
     totalAssets: 0,
     completedAssets: 0,
@@ -47,121 +38,28 @@ export default function DashboardPage() {
     processingAssets: 0
   })
 
-  // 模拟用户资产数据
+  // 计算统计数据
   useEffect(() => {
-    if (isConnected && address) {
-      loadUserAssets()
-    }
-  }, [isConnected, address]) // eslint-disable-line react-hooks/exhaustive-deps
+    if (dbAssets) {
+      const totalAssets = dbAssets.length
+      const completedAssets = dbAssets.filter(asset => asset.status === 'registered').length
+      const processingAssets = dbAssets.filter(asset => asset.status === 'pending').length
+      const totalEarnings = dbAssets.reduce((sum, asset) => {
+        // 如果有 license_terms，尝试从中获取收益信息
+        const earnings = asset.license_terms?.earnings || 0
+        return sum + Number(earnings)
+      }, 0)
 
-  const loadUserAssets = async () => {
-    setLoading(true)
-    try {
-      // 调用数据库API获取用户资产
-      const response = await fetch(`/api/database/assets?creator=${address}`)
-      const result = await response.json()
-
-      if (result.success && result.data) {
-        // 将数据库数据转换为组件所需格式
-        const dbAssets = result.data.assets.map((asset: any) => ({
-          id: asset.id,
-          title: asset.title,
-          description: asset.description || '',
-          contentType: asset.content_type || 'unknown',
-          status: asset.status,
-          createdAt: asset.created_at,
-          txHash: asset.tx_hash || '',
-          ipAssetId: asset.ip_asset_id || '',
-          contractAddress: asset.contract_address || '',
-          contentScore: asset.content_score || 0,
-          rewardAmount: 0, // TODO: 从earnings表计算
-          views: Math.floor(Math.random() * 5000), // 模拟数据，后续从实际来源获取
-          earnings: Math.floor(Math.random() * 100) // 模拟数据，后续从earnings表获取
-        }))
-
-        setAssets(dbAssets)
-        setStats(result.data.stats)
-      } else {
-        // 如果数据库API调用失败，使用模拟数据
-        console.warn('数据库API调用失败，使用模拟数据', result.error)
-        const mockAssets: IPAsset[] = [
-        {
-          id: '1',
-          title: '原创摄影作品《城市夜景》',
-          description: '都市夜晚的绚烂光影，展现现代城市的独特魅力',
-          contentType: 'image',
-          status: 'completed',
-          createdAt: '2024-03-15T10:30:00Z',
-          txHash: '0x1234567890abcdef1234567890abcdef12345678',
-          ipAssetId: 'ip_1001',
-          contractAddress: '0xabcdef1234567890abcdef1234567890abcdef12',
-          contentScore: 85,
-          rewardAmount: 250,
-          views: 1250,
-          earnings: 125.5
-        },
-        {
-          id: '2',
-          title: 'AI生成艺术系列',
-          description: '使用最新AI技术创作的未来主义艺术作品',
-          contentType: 'image',
-          status: 'completed',
-          createdAt: '2024-03-14T15:20:00Z',
-          txHash: '0x2345678901bcdef12345678901bcdef23456789',
-          ipAssetId: 'ip_1002',
-          contractAddress: '0xbcdef12345678901bcdef12345678901bcdef123',
-          contentScore: 72,
-          rewardAmount: 100,
-          views: 890,
-          earnings: 67.8
-        },
-        {
-          id: '3',
-          title: '产品评测视频',
-          description: '深度评测最新科技产品，为用户提供购买参考',
-          contentType: 'video',
-          status: 'processing',
-          createdAt: '2024-03-16T09:15:00Z',
-          txHash: '0x3456789012cdef123456789012cdef345678901',
-          ipAssetId: 'ip_1003',
-          contractAddress: '0xcdef123456789012cdef123456789012cdef1234',
-          contentScore: 68,
-          rewardAmount: 80,
-          views: 0,
-          earnings: 0
-        }
-      ]
-
-      setAssets(mockAssets)
-
-      // 计算统计数据
-      const totalAssets = mockAssets.length
-      const completedAssets = mockAssets.filter(asset => asset.status === 'completed').length
-      const processingAssets = mockAssets.filter(asset => asset.status === 'processing').length
-      const totalEarnings = mockAssets.reduce((sum, asset) => sum + (asset.earnings || 0), 0)
-
-        setStats({
-          totalAssets,
-          completedAssets,
-          totalEarnings,
-          processingAssets
-        })
-      }
-
-    } catch (error) {
-      console.error('加载用户资产失败:', error)
-      // 出错时显示空状态
-      setAssets([])
       setStats({
-        totalAssets: 0,
-        completedAssets: 0,
-        totalEarnings: 0,
-        processingAssets: 0
+        totalAssets,
+        completedAssets,
+        totalEarnings,
+        processingAssets
       })
-    } finally {
-      setLoading(false)
     }
-  }
+  }, [dbAssets])
+
+  const loading = userLoading || assetsLoading
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('zh-CN', {
@@ -180,9 +78,9 @@ export default function DashboardPage() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'completed':
+      case 'registered':
         return <Badge className="bg-green-100 text-green-800">已确权</Badge>
-      case 'processing':
+      case 'pending':
         return <Badge className="bg-yellow-100 text-yellow-800">处理中</Badge>
       case 'failed':
         return <Badge className="bg-red-100 text-red-800">失败</Badge>
@@ -250,7 +148,7 @@ export default function DashboardPage() {
             </div>
             <Button
               variant="outline"
-              onClick={loadUserAssets}
+              onClick={refetchAssets}
               disabled={loading}
               className="bg-slate-700/50 hover:bg-slate-600/50 text-blue-300 hover:text-white border-blue-500/30"
             >
@@ -342,7 +240,7 @@ export default function DashboardPage() {
                 <RefreshCw className="w-8 h-8 text-blue-400 mx-auto mb-4 animate-spin" />
                 <p className="text-blue-200/80">加载资产数据中...</p>
               </div>
-            ) : assets.length === 0 ? (
+            ) : !dbAssets || dbAssets.length === 0 ? (
               <div className="text-center py-12">
                 <Database className="w-16 h-16 text-blue-400 mx-auto mb-6" />
                 <h4 className="text-lg font-semibold text-white mb-2">暂无数字资产</h4>
@@ -357,67 +255,71 @@ export default function DashboardPage() {
               </div>
             ) : (
               <div className="space-y-4">
-                {assets.map((asset) => (
+                {dbAssets.map((asset) => (
                   <Card key={asset.id} className="bg-slate-700/30 backdrop-blur-sm border-slate-600/50 hover:border-blue-500/30 transition-colors">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
-                            <h4 className="text-lg font-semibold text-white">{asset.title}</h4>
+                            <h4 className="text-lg font-semibold text-white">{asset.name}</h4>
                             {getStatusBadge(asset.status)}
                           </div>
-                          <p className="text-blue-200/70 text-sm mb-4">{asset.description}</p>
+                          <p className="text-blue-200/70 text-sm mb-4">{asset.description || '暂无描述'}</p>
 
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                             <div>
-                              <p className="text-xs text-blue-200/50">内容评分</p>
-                              <p className="text-sm font-medium text-white">{asset.contentScore}/100</p>
+                              <p className="text-xs text-blue-200/50">文件类型</p>
+                              <p className="text-sm font-medium text-white">{asset.ipfs_hash ? 'IPFS' : '本地'}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-blue-200/50">代币奖励</p>
-                              <p className="text-sm font-medium text-white">{asset.rewardAmount}</p>
+                              <p className="text-xs text-blue-200/50">IPFS Hash</p>
+                              <p className="text-sm font-medium text-white truncate">{asset.ipfs_hash?.slice(0, 8)}...</p>
                             </div>
-                            {asset.views !== undefined && (
+                            {asset.license_terms?.views !== undefined && (
                               <div>
                                 <p className="text-xs text-blue-200/50">浏览量</p>
-                                <p className="text-sm font-medium text-white">{asset.views.toLocaleString()}</p>
+                                <p className="text-sm font-medium text-white">{asset.license_terms.views.toLocaleString()}</p>
                               </div>
                             )}
-                            {asset.earnings !== undefined && (
+                            {asset.license_terms?.earnings !== undefined && (
                               <div>
                                 <p className="text-xs text-blue-200/50">收益</p>
-                                <p className="text-sm font-medium text-white">${asset.earnings.toFixed(2)}</p>
+                                <p className="text-sm font-medium text-white">${asset.license_terms.earnings.toFixed(2)}</p>
                               </div>
                             )}
                           </div>
 
                           <div className="flex items-center space-x-4 text-xs text-blue-200/70">
-                            <span>创建时间: {formatDate(asset.createdAt)}</span>
-                            <span>IP ID: {asset.ipAssetId}</span>
+                            <span>创建时间: {formatDate(asset.created_at)}</span>
+                            {asset.ip_id && <span>IP ID: {asset.ip_id}</span>}
                           </div>
                         </div>
 
                         <div className="flex flex-col space-y-2 ml-4">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => copyToClipboard(asset.txHash)}
-                            className="bg-slate-600/50 hover:bg-slate-500/50 text-blue-300 border-blue-500/30"
-                          >
-                            <Copy className="w-4 h-4 mr-1" />
-                            复制TX
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            asChild
-                            className="bg-slate-600/50 hover:bg-slate-500/50 text-blue-300 border-blue-500/30"
-                          >
-                            <a href={`https://sepolia.etherscan.io/tx/${asset.txHash}`} target="_blank" rel="noopener noreferrer">
-                              <ExternalLink className="w-4 h-4 mr-1" />
-                              查看
-                            </a>
-                          </Button>
+                          {asset.ipfs_hash && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => copyToClipboard(asset.ipfs_hash)}
+                              className="bg-slate-600/50 hover:bg-slate-500/50 text-blue-300 border-blue-500/30"
+                            >
+                              <Copy className="w-4 h-4 mr-1" />
+                              复制Hash
+                            </Button>
+                          )}
+                          {asset.file_url && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              asChild
+                              className="bg-slate-600/50 hover:bg-slate-500/50 text-blue-300 border-blue-500/30"
+                            >
+                              <a href={asset.file_url} target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="w-4 h-4 mr-1" />
+                                查看
+                              </a>
+                            </Button>
+                          )}
                         </div>
                       </div>
                     </CardContent>

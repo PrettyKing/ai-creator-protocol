@@ -1,15 +1,16 @@
 # AI Creator Protocol
 
-基于Story Protocol的创作者版权保护与变现平台 MVP
+基于Story Protocol的创作者版权保护与变现平台
 
 ## 🚀 项目简介
 
 AI Creator Protocol 是一个创新的Web3创作者经济平台，帮助社交媒体创作者通过AI授权助手和Story Protocol完成：
 
 - 📝 **内容注册** - 将创作内容注册为链上IP资产
-- 🤖 **AI授权助手** - 智能生成标准授权条款 
+- 🤖 **AI授权助手** - 智能生成标准授权条款
 - 🔐 **链上确权** - 部署智能合约，建立不可篡改的版权证明
 - 💰 **代币奖励** - 基于内容影响力评分获得平台代币
+- 🗄️ **数据持久化** - Supabase数据库集成，完整的用户资产管理
 
 ## ✨ 核心功能
 
@@ -18,7 +19,7 @@ AI Creator Protocol 是一个创新的Web3创作者经济平台，帮助社交�
 - 支持输入社交媒体链接（抖音、小红书、Instagram等）
 - 自动解析内容元数据并评分
 
-### 2. AI授权助手  
+### 2. AI授权助手
 - 通过智能问答了解用户偏好
 - 基于GPT-4生成个性化授权条款
 - 支持商业用途、二次创作、署名等多维度配置
@@ -33,33 +34,54 @@ AI Creator Protocol 是一个创新的Web3创作者经济平台，帮助社交�
 - 部署ERC-721授权合约
 - 绑定授权条款与版权证明
 
+### 5. 数据库集成
+- 用户钱包地址管理
+- IP资产完整生命周期跟踪
+- 社交媒体账号连接记录
+- 授权许可证管理
+
 ## 🛠 技术栈
 
 - **前端**: Next.js 14 + TypeScript + Tailwind CSS
 - **UI组件**: shadcn/ui + Radix UI
 - **Web3**: RainbowKit + Wagmi + Viem
+- **数据库**: Supabase (PostgreSQL)
 - **区块链**: Story Protocol + Base Sepolia
 - **AI**: OpenAI GPT-4 API
 - **存储**: IPFS (Pinata)
 
-## 环境配置
-创建 `.env.local` 文件：
-```env
-# OpenAI API Key (用于AI授权助手)
-NEXT_PUBLIC_OPENAI_API_KEY=sk-your-openai-key
+## 📚 文档
 
-# WalletConnect Project ID (用于钱包连接)
-NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your-walletconnect-id
+所有项目文档都在 `/md` 文件夹中：
 
-# Pinata API Keys (用于IPFS存储)
-PINATA_API_KEY=your-pinata-api-key
-PINATA_SECRET_API_KEY=your-pinata-secret-key
+- **[开发指南](md/DEVELOPMENT.md)** - 详细的开发和部署说明
+- **[环境配置](md/ENV_SETUP.md)** - 环境变量配置指南
+- **[Supabase配置](md/SUPABASE_SETUP.md)** - 数据库设置指南
+- **[设计文档](md/desgin.md)** - 项目设计规范
+- **[开发待办](md/TODO.md)** - 项目任务列表
+- **[主题修复记录](md/BACKGROUND_THEME_FIXED.md)** - 主题相关修复
+- **[数据库集成总结](md/DATABASE_INTEGRATION_SUMMARY.md)** - 数据库功能说明
 
-# Story Protocol API (如需要)
-STORY_PROTOCOL_API_KEY=your-story-protocol-key
+## 🚀 快速开始
+
+### 1. 克隆项目
+```bash
+git clone [project-url]
+cd ai-creator-protocol
 ```
 
-### 4. 启动开发服务器
+### 2. 安装依赖
+```bash
+npm install
+```
+
+### 3. 环境配置
+参考 [环境配置文档](md/ENV_SETUP.md) 设置所需的API密钥
+
+### 4. 数据库配置
+参考 [Supabase配置指南](md/SUPABASE_SETUP.md) 设置数据库
+
+### 5. 启动开发服务器
 ```bash
 npm run dev
 ```

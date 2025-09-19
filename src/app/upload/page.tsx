@@ -8,6 +8,7 @@ import { Upload, Link2, FileImage, Video, Sparkles, Zap, Wallet } from 'lucide-r
 import { PageLayout } from '@/components/common'
 import { ContentMetadata, SocialMetrics } from '@/types'
 import { ContentScorer } from '@/lib/scoring'
+import { useUser, useAssets } from '@/hooks/useDatabase'
 
 export default function UploadPage() {
   const router = useRouter()
