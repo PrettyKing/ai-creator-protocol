@@ -1,6 +1,55 @@
-import { supabase, getOrCreateUser } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/client'
 import { Database } from '@/types/database'
 import { LicenseTerms, SocialMetrics } from '@/types'
+
+const supabase = createClient()
+
+// 获取或创建用户
+async function getOrCreateUser(walletAddress: string) {
+  try {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      return {
+        user: {
+          id: 'mock-user-' + walletAddress,
+          wallet_address: walletAddress,
+          created_at: new Date().toISOString()
+        },
+        error: null
+      }
+    }
+
+    // 首先查找用户
+    const { data: existingUser, error: findError } = await supabase
+      .from('users')
+      .select('*')
+      .eq('wallet_address', walletAddress)
+      .single()
+
+    if (existingUser) {
+      return { user: existingUser, error: null }
+    }
+
+    // 如果用户不存在，创建新用户
+    const { data: newUser, error: createError } = await (supabase as any)
+      .from('users')
+      .insert({
+        wallet_address: walletAddress,
+        created_at: new Date().toISOString()
+      })
+      .select()
+      .single()
+
+    if (createError) {
+      console.error('创建用户失败:', createError)
+      return { user: null, error: createError }
+    }
+
+    return { user: newUser, error: null }
+  } catch (error) {
+    console.error('获取或创建用户失败:', error)
+    return { user: null, error }
+  }
+}
 
 type IPAsset = Database['public']['Tables']['ip_assets']['Row']
 type IPAssetInsert = Database['public']['Tables']['ip_assets']['Insert']
@@ -24,7 +73,7 @@ export class DatabaseService {
     grade?: string
   }) {
     try {
-      if (!supabase) {
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
         console.warn('Supabase未配置，返回模拟数据')
         return {
           success: true,
@@ -60,7 +109,7 @@ export class DatabaseService {
         updated_at: new Date().toISOString()
       }
 
-      const { data: ipAsset, error } = await supabase
+      const { data: ipAsset, error } = await (supabase as any)
         .from('ip_assets')
         .insert(insertData)
         .select('*')
@@ -77,7 +126,7 @@ export class DatabaseService {
 
   // 更新IP资产状态
   static async updateIPAsset(id: string, updates: IPAssetUpdate) {
-    if (!supabase) {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
       console.warn('Supabase未配置，跳过数据库更新')
       return { success: false, data: null, error: 'Supabase未配置' }
     }
@@ -88,7 +137,7 @@ export class DatabaseService {
         updated_at: new Date().toISOString()
       }
 
-      const { data: ipAsset, error } = await supabase
+      const { data: ipAsset, error } = await (supabase as any)
         .from('ip_assets')
         .update(updateData)
         .eq('id', id)
@@ -106,7 +155,7 @@ export class DatabaseService {
 
   // 获取用户的所有IP资产
   static async getUserIPAssets(creatorAddress: string) {
-    if (!supabase) {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
       console.warn('Supabase未配置，返回空数组')
       return { success: true, data: [], error: null }
     }
@@ -133,7 +182,7 @@ export class DatabaseService {
 
   // 创建授权条款
   static async createLicenseTerms(ipAssetId: string, licenseTerms: LicenseTerms) {
-    if (!supabase) {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
       console.warn('Supabase未配置，跳过授权条款创建')
       return { success: false, data: null, error: 'Supabase未配置' }
     }
@@ -152,7 +201,7 @@ export class DatabaseService {
         created_at: new Date().toISOString()
       }
 
-      const { data: terms, error } = await supabase
+      const { data: terms, error } = await (supabase as any)
         .from('license_terms')
         .insert(insertData)
         .select('*')
@@ -180,7 +229,7 @@ export class DatabaseService {
     blockNumber?: number
     status?: string
   }) {
-    if (!supabase) {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
       console.warn('Supabase未配置，跳过交易记录')
       return { success: false, data: null, error: 'Supabase未配置' }
     }
@@ -200,7 +249,7 @@ export class DatabaseService {
         created_at: new Date().toISOString()
       }
 
-      const { data: transaction, error } = await supabase
+      const { data: transaction, error } = await (supabase as any)
         .from('transactions')
         .insert(insertData)
         .select('*')
@@ -224,7 +273,7 @@ export class DatabaseService {
     source?: string
     txHash?: string
   }) {
-    if (!supabase) {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
       console.warn('Supabase未配置，跳过收益记录')
       return { success: false, data: null, error: 'Supabase未配置' }
     }
@@ -243,7 +292,7 @@ export class DatabaseService {
         created_at: new Date().toISOString()
       }
 
-      const { data: earnings, error } = await supabase
+      const { data: earnings, error } = await (supabase as any)
         .from('earnings')
         .insert(insertData)
         .select('*')
@@ -260,7 +309,7 @@ export class DatabaseService {
 
   // 获取用户统计信息
   static async getUserStats(creatorAddress: string) {
-    if (!supabase) {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
       console.warn('Supabase未配置，返回默认统计数据')
       return {
         success: true,
@@ -291,9 +340,9 @@ export class DatabaseService {
       if (earningsError) throw earningsError
 
       const totalAssets = assetsCount?.length || 0
-      const completedAssets = assetsCount?.filter(asset => asset.status === 'completed').length || 0
-      const processingAssets = assetsCount?.filter(asset => asset.status === 'processing').length || 0
-      const totalEarnings = earnings?.reduce((sum, earning) => sum + earning.amount, 0) || 0
+      const completedAssets = assetsCount?.filter((asset: any) => asset.status === 'registered').length || 0
+      const processingAssets = assetsCount?.filter((asset: any) => asset.status === 'pending' || asset.status === 'processing').length || 0
+      const totalEarnings = earnings?.reduce((sum: number, earning: any) => sum + earning.amount, 0) || 0
 
       return {
         success: true,
@@ -322,7 +371,7 @@ export class DatabaseService {
 
   // 搜索IP资产 (简化版本，Supabase未配置时返回空数组)
   static async searchIPAssets(query: string, limit = 20) {
-    if (!supabase) {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
       return { success: true, data: [], error: null }
     }
 
@@ -349,7 +398,7 @@ export class DatabaseService {
 
   // 获取热门IP资产
   static async getPopularIPAssets(limit = 20) {
-    if (!supabase) {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
       return { success: true, data: [], error: null }
     }
 

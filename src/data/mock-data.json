@@ -1,0 +1,788 @@
+{
+  "users": [
+    {
+      "id": "user_1",
+      "wallet_address": "0x1234567890123456789012345678901234567890",
+      "username": "用户_7890",
+      "email": null,
+      "avatar_url": null,
+      "created_at": "2025-09-20T03:36:39.490Z",
+      "last_login": null
+    },
+    {
+      "id": "user_2",
+      "wallet_address": "0x2345678901234567890123456789012345678901",
+      "username": "用户_8901",
+      "email": null,
+      "avatar_url": null,
+      "created_at": "2025-09-20T03:36:39.491Z",
+      "last_login": null
+    },
+    {
+      "id": "user_3",
+      "wallet_address": "0x3456789012345678901234567890123456789012",
+      "username": "用户_9012",
+      "email": null,
+      "avatar_url": null,
+      "created_at": "2025-09-20T03:36:39.491Z",
+      "last_login": null
+    },
+    {
+      "id": "user_4",
+      "wallet_address": "0x4567890123456789012345678901234567890123",
+      "username": "用户_0123",
+      "email": null,
+      "avatar_url": null,
+      "created_at": "2025-09-20T03:36:39.491Z",
+      "last_login": null
+    },
+    {
+      "id": "user_5",
+      "wallet_address": "0x5678901234567890123456789012345678901234",
+      "username": "用户_1234",
+      "email": null,
+      "avatar_url": null,
+      "created_at": "2025-09-20T03:36:39.491Z",
+      "last_login": null
+    }
+  ],
+  "assets": [
+    {
+      "id": "asset_1_1",
+      "title": "智能合约 #1",
+      "description": "这是一个code类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_1",
+      "creator_address": "0x1234567890123456789012345678901234567890",
+      "content_type": "code",
+      "content_hash": "Qmljn8d9cfg61758339399490",
+      "metadata_hash": "Qm5ghn05c9r71758339399490",
+      "social_url": null,
+      "social_metrics": null,
+      "content_score": 77,
+      "grade": "C",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": null,
+      "status": "pending",
+      "created_at": "2025-09-07T21:48:45.022Z",
+      "updated_at": "2025-09-20T03:36:39.490Z"
+    },
+    {
+      "id": "asset_1_2",
+      "title": "教学视频 #2",
+      "description": "这是一个video类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_1",
+      "creator_address": "0x1234567890123456789012345678901234567890",
+      "content_type": "video",
+      "content_hash": "Qmr4fvr516rt1758339399490",
+      "metadata_hash": "Qmrw5l62jwirl1758339399490",
+      "social_url": "https://weibo.com/post/0.dgw2uka8kwd",
+      "social_metrics": {
+        "platform": "weibo",
+        "followers": 46133,
+        "views": 371222,
+        "likes": 39964,
+        "comments": 370,
+        "shares": 418
+      },
+      "content_score": 96,
+      "grade": "B",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": "0xd8d022ef2268b",
+      "status": "registered",
+      "created_at": "2025-08-24T00:00:29.527Z",
+      "updated_at": "2025-09-20T03:36:39.490Z"
+    },
+    {
+      "id": "asset_1_3",
+      "title": "音效设计 #3",
+      "description": "这是一个audio类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_1",
+      "creator_address": "0x1234567890123456789012345678901234567890",
+      "content_type": "audio",
+      "content_hash": "Qm8ohb77zsyo71758339399491",
+      "metadata_hash": "Qmiidx0gevwfs1758339399491",
+      "social_url": null,
+      "social_metrics": null,
+      "content_score": 73,
+      "grade": "C",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": null,
+      "status": "pending",
+      "created_at": "2025-09-12T20:14:03.485Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "asset_2_1",
+      "title": "数字插画 #1",
+      "description": "这是一个image类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_2",
+      "creator_address": "0x2345678901234567890123456789012345678901",
+      "content_type": "image",
+      "content_hash": "Qmbpz84iafmrh1758339399491",
+      "metadata_hash": "Qmnk7nrrmbqh1758339399491",
+      "social_url": null,
+      "social_metrics": null,
+      "content_score": 89,
+      "grade": "C",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": null,
+      "status": "failed",
+      "created_at": "2025-09-11T23:36:27.977Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "asset_2_2",
+      "title": "创意小说 #2",
+      "description": "这是一个text类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_2",
+      "creator_address": "0x2345678901234567890123456789012345678901",
+      "content_type": "text",
+      "content_hash": "Qm9sx7ttllgci1758339399491",
+      "metadata_hash": "Qmihqhqt7jon1758339399491",
+      "social_url": "https://tiktok.com/post/0.ocg9f1qxl2",
+      "social_metrics": {
+        "platform": "tiktok",
+        "followers": 70133,
+        "views": 193147,
+        "likes": 18587,
+        "comments": 366,
+        "shares": 440
+      },
+      "content_score": 87,
+      "grade": "A",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": null,
+      "status": "failed",
+      "created_at": "2025-08-28T23:39:06.121Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "asset_2_3",
+      "title": "框架组件 #3",
+      "description": "这是一个code类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_2",
+      "creator_address": "0x2345678901234567890123456789012345678901",
+      "content_type": "code",
+      "content_hash": "Qm3wii2ai8ur1758339399491",
+      "metadata_hash": "Qm3a3ivlmrp0m1758339399491",
+      "social_url": "https://tiktok.com/post/0.kidkmnw5xtq",
+      "social_metrics": {
+        "platform": "tiktok",
+        "followers": 95776,
+        "views": 662559,
+        "likes": 28373,
+        "comments": 62,
+        "shares": 154
+      },
+      "content_score": 90,
+      "grade": "A+",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": null,
+      "status": "pending",
+      "created_at": "2025-09-13T22:42:45.216Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "asset_2_4",
+      "title": "技术文章 #4",
+      "description": "这是一个text类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_2",
+      "creator_address": "0x2345678901234567890123456789012345678901",
+      "content_type": "text",
+      "content_hash": "Qmkykcc1mdnnt1758339399491",
+      "metadata_hash": "Qm5wz1hjj4mtb1758339399491",
+      "social_url": null,
+      "social_metrics": null,
+      "content_score": 86,
+      "grade": "C",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": null,
+      "status": "pending",
+      "created_at": "2025-08-30T00:39:31.926Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "asset_2_5",
+      "title": "诗歌作品 #5",
+      "description": "这是一个text类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_2",
+      "creator_address": "0x2345678901234567890123456789012345678901",
+      "content_type": "text",
+      "content_hash": "Qm34c8v9urlgv1758339399491",
+      "metadata_hash": "Qm3fye0ft0do81758339399491",
+      "social_url": null,
+      "social_metrics": null,
+      "content_score": 78,
+      "grade": "B",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": null,
+      "status": "pending",
+      "created_at": "2025-09-04T15:04:09.598Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "asset_3_1",
+      "title": "数字插画 #1",
+      "description": "这是一个image类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_3",
+      "creator_address": "0x3456789012345678901234567890123456789012",
+      "content_type": "image",
+      "content_hash": "Qmnvhn4kijues1758339399491",
+      "metadata_hash": "Qmeltw73vf7yf1758339399491",
+      "social_url": null,
+      "social_metrics": null,
+      "content_score": 97,
+      "grade": "C",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": "0x7ea2f77bf7d3a",
+      "status": "registered",
+      "created_at": "2025-08-21T06:55:45.472Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "asset_3_2",
+      "title": "工具脚本 #2",
+      "description": "这是一个code类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_3",
+      "creator_address": "0x3456789012345678901234567890123456789012",
+      "content_type": "code",
+      "content_hash": "Qmva5du2736k1758339399491",
+      "metadata_hash": "Qmjwguit3p3zl1758339399491",
+      "social_url": null,
+      "social_metrics": null,
+      "content_score": 96,
+      "grade": "A",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": null,
+      "status": "pending",
+      "created_at": "2025-08-29T01:44:23.800Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "asset_4_1",
+      "title": "产品文档 #1",
+      "description": "这是一个text类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_4",
+      "creator_address": "0x4567890123456789012345678901234567890123",
+      "content_type": "text",
+      "content_hash": "Qm1fl4l21pvq1758339399491",
+      "metadata_hash": "Qmzatdw0gm4ig1758339399491",
+      "social_url": null,
+      "social_metrics": null,
+      "content_score": 91,
+      "grade": "B",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": "0xb5b5426cb7122",
+      "status": "registered",
+      "created_at": "2025-09-01T11:54:07.548Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "asset_4_2",
+      "title": "播客节目 #2",
+      "description": "这是一个audio类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_4",
+      "creator_address": "0x4567890123456789012345678901234567890123",
+      "content_type": "audio",
+      "content_hash": "Qmbdf2bviu69t1758339399491",
+      "metadata_hash": "Qmfwwt4r6ca41758339399491",
+      "social_url": "https://instagram.com/post/0.ko7vl2wy6br",
+      "social_metrics": {
+        "platform": "instagram",
+        "followers": 33929,
+        "views": 158620,
+        "likes": 6332,
+        "comments": 380,
+        "shares": 171
+      },
+      "content_score": 96,
+      "grade": "B",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": null,
+      "status": "failed",
+      "created_at": "2025-09-17T14:52:27.778Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "asset_5_1",
+      "title": "创意小说 #1",
+      "description": "这是一个text类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_5",
+      "creator_address": "0x5678901234567890123456789012345678901234",
+      "content_type": "text",
+      "content_hash": "Qmmd0qpxrtkr71758339399491",
+      "metadata_hash": "Qmahfrnhf8wq1758339399491",
+      "social_url": "https://tiktok.com/post/0.5nvi7i3817b",
+      "social_metrics": {
+        "platform": "tiktok",
+        "followers": 39474,
+        "views": 676898,
+        "likes": 36548,
+        "comments": 40,
+        "shares": 204
+      },
+      "content_score": 77,
+      "grade": "B",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": null,
+      "status": "pending",
+      "created_at": "2025-08-26T16:40:42.600Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "asset_5_2",
+      "title": "智能合约 #2",
+      "description": "这是一个code类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_5",
+      "creator_address": "0x5678901234567890123456789012345678901234",
+      "content_type": "code",
+      "content_hash": "Qm5oe6y8wlniy1758339399491",
+      "metadata_hash": "Qmh5i7zurs5f41758339399491",
+      "social_url": "https://weibo.com/post/0.6r6qy7mt6c3",
+      "social_metrics": {
+        "platform": "weibo",
+        "followers": 5926,
+        "views": 995854,
+        "likes": 16282,
+        "comments": 296,
+        "shares": 271
+      },
+      "content_score": 66,
+      "grade": "B",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": null,
+      "status": "pending",
+      "created_at": "2025-08-27T17:44:14.327Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "asset_5_3",
+      "title": "创意小说 #3",
+      "description": "这是一个text类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_5",
+      "creator_address": "0x5678901234567890123456789012345678901234",
+      "content_type": "text",
+      "content_hash": "Qm50gk0780kna1758339399491",
+      "metadata_hash": "Qmcjibey76wt1758339399491",
+      "social_url": null,
+      "social_metrics": null,
+      "content_score": 74,
+      "grade": "C",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": "0x87f56f00e3441",
+      "status": "registered",
+      "created_at": "2025-08-22T22:28:44.089Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "asset_5_4",
+      "title": "有声读物 #4",
+      "description": "这是一个audio类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_5",
+      "creator_address": "0x5678901234567890123456789012345678901234",
+      "content_type": "audio",
+      "content_hash": "Qmf0yw2v81ay1758339399491",
+      "metadata_hash": "Qmlvtf62gzbxo1758339399491",
+      "social_url": null,
+      "social_metrics": null,
+      "content_score": 81,
+      "grade": "B",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": null,
+      "status": "failed",
+      "created_at": "2025-08-21T09:41:41.590Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "asset_5_5",
+      "title": "概念设计 #5",
+      "description": "这是一个image类型的创作内容，展示了创作者的独特视角和技能。通过AI创作者协议保护版权并实现价值变现。",
+      "creator_id": "user_5",
+      "creator_address": "0x5678901234567890123456789012345678901234",
+      "content_type": "image",
+      "content_hash": "Qmcgdb4y1l851758339399491",
+      "metadata_hash": "Qmj4fd71xx7z1758339399491",
+      "social_url": null,
+      "social_metrics": null,
+      "content_score": 80,
+      "grade": "B",
+      "tx_hash": null,
+      "contract_address": null,
+      "token_id": null,
+      "ip_asset_id": null,
+      "status": "failed",
+      "created_at": "2025-09-15T16:37:43.296Z",
+      "updated_at": "2025-09-20T03:36:39.491Z"
+    }
+  ],
+  "licenseTerms": [
+    {
+      "id": "license_asset_1_1",
+      "ip_asset_id": "asset_1_1",
+      "commercial_use": false,
+      "derivatives": true,
+      "attribution": true,
+      "share_alike": true,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 37,
+      "royalty": 10,
+      "created_at": "2025-09-20T03:36:39.490Z"
+    },
+    {
+      "id": "license_asset_1_2",
+      "ip_asset_id": "asset_1_2",
+      "commercial_use": true,
+      "derivatives": true,
+      "attribution": true,
+      "share_alike": false,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 45,
+      "royalty": 20,
+      "created_at": "2025-09-20T03:36:39.490Z"
+    },
+    {
+      "id": "license_asset_1_3",
+      "ip_asset_id": "asset_1_3",
+      "commercial_use": true,
+      "derivatives": false,
+      "attribution": true,
+      "share_alike": true,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 22,
+      "royalty": 22,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "license_asset_2_1",
+      "ip_asset_id": "asset_2_1",
+      "commercial_use": false,
+      "derivatives": false,
+      "attribution": true,
+      "share_alike": true,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 13,
+      "royalty": 19,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "license_asset_2_2",
+      "ip_asset_id": "asset_2_2",
+      "commercial_use": false,
+      "derivatives": false,
+      "attribution": true,
+      "share_alike": true,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 27,
+      "royalty": 12,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "license_asset_2_3",
+      "ip_asset_id": "asset_2_3",
+      "commercial_use": false,
+      "derivatives": false,
+      "attribution": true,
+      "share_alike": true,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 20,
+      "royalty": 5,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "license_asset_2_4",
+      "ip_asset_id": "asset_2_4",
+      "commercial_use": true,
+      "derivatives": false,
+      "attribution": true,
+      "share_alike": false,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 45,
+      "royalty": 7,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "license_asset_2_5",
+      "ip_asset_id": "asset_2_5",
+      "commercial_use": false,
+      "derivatives": false,
+      "attribution": true,
+      "share_alike": false,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 38,
+      "royalty": 10,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "license_asset_3_1",
+      "ip_asset_id": "asset_3_1",
+      "commercial_use": true,
+      "derivatives": false,
+      "attribution": true,
+      "share_alike": true,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 44,
+      "royalty": 14,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "license_asset_3_2",
+      "ip_asset_id": "asset_3_2",
+      "commercial_use": true,
+      "derivatives": false,
+      "attribution": true,
+      "share_alike": true,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 26,
+      "royalty": 21,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "license_asset_4_1",
+      "ip_asset_id": "asset_4_1",
+      "commercial_use": false,
+      "derivatives": true,
+      "attribution": true,
+      "share_alike": true,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 12,
+      "royalty": 18,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "license_asset_4_2",
+      "ip_asset_id": "asset_4_2",
+      "commercial_use": true,
+      "derivatives": true,
+      "attribution": true,
+      "share_alike": true,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 16,
+      "royalty": 8,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "license_asset_5_1",
+      "ip_asset_id": "asset_5_1",
+      "commercial_use": false,
+      "derivatives": false,
+      "attribution": true,
+      "share_alike": false,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 32,
+      "royalty": 11,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "license_asset_5_2",
+      "ip_asset_id": "asset_5_2",
+      "commercial_use": false,
+      "derivatives": false,
+      "attribution": true,
+      "share_alike": true,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 30,
+      "royalty": 24,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "license_asset_5_3",
+      "ip_asset_id": "asset_5_3",
+      "commercial_use": false,
+      "derivatives": true,
+      "attribution": true,
+      "share_alike": false,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 43,
+      "royalty": 11,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "license_asset_5_4",
+      "ip_asset_id": "asset_5_4",
+      "commercial_use": false,
+      "derivatives": false,
+      "attribution": true,
+      "share_alike": true,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 47,
+      "royalty": 13,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    },
+    {
+      "id": "license_asset_5_5",
+      "ip_asset_id": "asset_5_5",
+      "commercial_use": true,
+      "derivatives": false,
+      "attribution": true,
+      "share_alike": true,
+      "territory": [
+        "全球"
+      ],
+      "channels": [
+        "社交媒体",
+        "网站博客",
+        "商业广告"
+      ],
+      "timeframe": 17,
+      "royalty": 23,
+      "created_at": "2025-09-20T03:36:39.491Z"
+    }
+  ],
+  "earnings": [
+    {
+      "id": "earning_asset_5_3_1",
+      "user_id": "user_5",
+      "ip_asset_id": "asset_5_3",
+      "amount": 160,
+      "token_symbol": "ETH",
+      "source": "license",
+      "tx_hash": "0x1da8d827020a9",
+      "created_at": "2025-09-16T23:49:54.441Z"
+    }
+  ],
+  "generatedAt": "2025-09-20T03:36:39.490Z"
+}

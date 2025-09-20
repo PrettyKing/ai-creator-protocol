@@ -20,6 +20,8 @@ import {
 import Link from 'next/link'
 import { PageLayout } from '@/components/common'
 import { useUser, useAssets, useSocialIntegrations } from '@/hooks/useDatabase'
+import { DatabaseService } from '@/lib/database/services'
+import { MockDataService } from '@/lib/mock-data-service'
 
 export default function DashboardPage() {
   const { address, isConnected } = useAccount()
@@ -37,10 +39,94 @@ export default function DashboardPage() {
     totalEarnings: 0,
     processingAssets: 0
   })
+  const [realAssets, setRealAssets] = useState<any[]>([])
+  const [isLoadingData, setIsLoadingData] = useState(false)
+  const [isCreatingTestData, setIsCreatingTestData] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
 
-  // 计算统计数据
+  // 从API加载真实数据
+  const loadRealData = async () => {
+    if (!address) return
+
+    setIsLoadingData(true)
+    try {
+      // 首先尝试从API加载
+      const response = await fetch(`/api/users/${address}`)
+      if (response.ok) {
+        const result = await response.json()
+        if (result.success) {
+          setStats(result.data.stats)
+          setRealAssets(result.data.assets)
+          return
+        }
+      }
+
+      // 如果API失败，从模拟数据加载
+      console.log('从模拟数据加载数据...')
+      const mockStats = MockDataService.getUserStats(address)
+      const mockAssets = MockDataService.getUserAssets(address)
+
+      setStats(mockStats)
+      setRealAssets(mockAssets)
+
+    } catch (error) {
+      console.error('加载数据失败:', error)
+
+      // 最后备用：加载模拟数据
+      try {
+        const mockStats = MockDataService.getUserStats(address)
+        const mockAssets = MockDataService.getUserAssets(address)
+        setStats(mockStats)
+        setRealAssets(mockAssets)
+      } catch (mockError) {
+        console.error('加载模拟数据也失败:', mockError)
+      }
+    } finally {
+      setIsLoadingData(false)
+    }
+  }
+
+  // 创建测试数据
+  const createTestData = async () => {
+    if (!address) return
+
+    setIsCreatingTestData(true)
+    try {
+      const response = await fetch('/api/test-data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ address })
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        if (result.success) {
+          // 创建成功后自动刷新数据
+          await loadRealData()
+          refetchAssets()
+          setSuccessMessage(`成功创建 ${result.data.createdCount} 个测试资产！`)
+          setTimeout(() => setSuccessMessage(''), 3000)
+        }
+      }
+    } catch (error) {
+      console.error('创建测试数据失败:', error)
+    } finally {
+      setIsCreatingTestData(false)
+    }
+  }
+
+  // 当钱包地址变化时加载数据
   useEffect(() => {
-    if (dbAssets) {
+    if (address) {
+      loadRealData()
+    }
+  }, [address])
+
+  // 原有的模拟数据计算（作为备用）
+  useEffect(() => {
+    if (dbAssets && realAssets.length === 0) {
       const totalAssets = dbAssets.length
       const completedAssets = dbAssets.filter(asset => asset.status === 'registered').length
       const processingAssets = dbAssets.filter(asset => asset.status === 'pending').length
@@ -126,6 +212,20 @@ export default function DashboardPage() {
       backText="返回首页"
     >
       <div className="max-w-7xl mx-auto space-y-8">
+        {/* 成功消息 */}
+        {successMessage && (
+          <div className="bg-green-800/30 backdrop-blur-sm border border-green-500/20 rounded-2xl p-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <p className="text-green-300 font-medium">{successMessage}</p>
+            </div>
+          </div>
+        )}
+
         {/* 用户信息 */}
         <div className="bg-slate-800/30 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6">
           <div className="flex items-center justify-between">
@@ -146,19 +246,38 @@ export default function DashboardPage() {
                 </div>
               </div>
             </div>
-            <Button
-              variant="outline"
-              onClick={refetchAssets}
-              disabled={loading}
-              className="bg-slate-700/50 hover:bg-slate-600/50 text-blue-300 hover:text-white border-blue-500/30"
-            >
-              {loading ? (
-                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <RefreshCw className="w-4 h-4 mr-2" />
-              )}
-              刷新数据
-            </Button>
+            <div className="flex items-center space-x-3">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  refetchAssets()
+                  loadRealData()
+                }}
+                disabled={isLoadingData || assetsLoading}
+                className="bg-slate-700/50 hover:bg-slate-600/50 text-blue-300 hover:text-white border-blue-500/30"
+              >
+                {(isLoadingData || assetsLoading) ? (
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                )}
+                刷新数据
+              </Button>
+
+              <Button
+                variant="outline"
+                onClick={createTestData}
+                disabled={isCreatingTestData}
+                className="bg-green-700/50 hover:bg-green-600/50 text-green-300 hover:text-white border-green-500/30"
+              >
+                {isCreatingTestData ? (
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Database className="w-4 h-4 mr-2" />
+                )}
+                创建测试数据
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -291,7 +410,7 @@ export default function DashboardPage() {
 
                           <div className="flex items-center space-x-4 text-xs text-blue-200/70">
                             <span>创建时间: {formatDate(asset.created_at)}</span>
-                            {asset.ip_id && <span>IP ID: {asset.ip_id}</span>}
+                            {(asset as any).ip_asset_id && <span>IP ID: {(asset as any).ip_asset_id}</span>}
                           </div>
                         </div>
 

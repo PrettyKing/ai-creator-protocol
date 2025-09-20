@@ -68,7 +68,6 @@ export type Database = {
           status?: 'pending' | 'registered' | 'failed'
           created_at?: string
           updated_at?: string
-          [key: string]: any
         }
       }
       social_integrations: {

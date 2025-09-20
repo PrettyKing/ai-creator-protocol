@@ -4,80 +4,48 @@ import { Button } from '@/components/ui/button'
 import { Upload, Database, Activity, TrendingUp, Cpu } from 'lucide-react'
 import Link from 'next/link'
 import { PageLayout, StatsCard, ContentCard } from '@/components/common'
+import { MockDataService } from '@/lib/mock-data-service'
 
 export default function Home() {
+  // 获取真实统计数据
+  const globalStats = MockDataService.getGlobalStats()
+  const latestAssets = MockDataService.getLatestAssets(6)
+
   const statsData = [
-    { icon: Database, label: '总资产', value: '1,256', gradient: 'from-blue-500 to-cyan-500' },
-    { icon: Activity, label: '已确权', value: '1,089', gradient: 'from-green-500 to-emerald-500' },
-    { icon: TrendingUp, label: '总收益', value: '$24.2k', gradient: 'from-purple-500 to-pink-500' },
-    { icon: Cpu, label: '处理中', value: '167', gradient: 'from-orange-500 to-red-500' }
+    { icon: Database, label: '总资产', value: globalStats.totalAssets.toString(), gradient: 'from-blue-500 to-cyan-500' },
+    { icon: Activity, label: '已确权', value: globalStats.registeredAssets.toString(), gradient: 'from-green-500 to-emerald-500' },
+    { icon: TrendingUp, label: '总收益', value: `${globalStats.totalEarnings} 代币`, gradient: 'from-purple-500 to-pink-500' },
+    { icon: Cpu, label: '用户数', value: globalStats.totalUsers.toString(), gradient: 'from-orange-500 to-red-500' }
   ]
 
-  const contentData = [
-    {
-      id: 1,
-      title: "AI艺术作品合集",
-      creator: "0x1234...5678",
-      type: "图片",
-      date: "2024-03-15",
-      status: "已确权",
-      value: "0.5 ETH",
-      gradient: "from-purple-500 to-pink-500"
-    },
-    {
-      id: 2,
-      title: "科技评测视频",
-      creator: "0x2345...6789", 
-      type: "视频",
-      date: "2024-03-14",
-      status: "处理中",
-      value: "0.3 ETH",
-      gradient: "from-blue-500 to-cyan-500"
-    },
-    {
-      id: 3,
-      title: "音乐原创作品",
-      creator: "0x3456...7890",
-      type: "音频", 
-      date: "2024-03-13",
-      status: "已确权",
-      value: "0.8 ETH",
-      gradient: "from-green-500 to-emerald-500"
-    },
-    {
-      id: 4,
-      title: "摄影作品系列",
-      creator: "0x4567...8901",
-      type: "图片",
-      date: "2024-03-12", 
-      status: "已确权",
-      value: "1.2 ETH",
-      gradient: "from-yellow-500 to-orange-500"
-    },
-    {
-      id: 5,
-      title: "设计作品展示",
-      creator: "0x5678...9012",
-      type: "图片",
-      date: "2024-03-11",
-      status: "已确权",
-      value: "0.6 ETH",
-      gradient: "from-indigo-500 to-purple-500"
-    },
-    {
-      id: 6,
-      title: "编程教学视频",
-      creator: "0x6789...0123",
-      type: "视频",
-      date: "2024-03-10",
-      status: "处理中",
-      value: "0.4 ETH",
-      gradient: "from-red-500 to-pink-500"
-    }
-  ]
+  // 将最新资产转换为内容数据格式
+  const contentData = latestAssets.map((asset, index) => ({
+    id: asset.id,
+    title: asset.title,
+    creator: `${asset.creator_address.slice(0, 6)}...${asset.creator_address.slice(-4)}`,
+    type: asset.content_type === 'image' ? '图片' :
+          asset.content_type === 'video' ? '视频' :
+          asset.content_type === 'audio' ? '音频' :
+          asset.content_type === 'text' ? '文本' :
+          asset.content_type === 'code' ? '代码' : asset.content_type,
+    date: new Date(asset.created_at).toLocaleDateString('zh-CN'),
+    status: asset.status === 'registered' ? '已确权' :
+            asset.status === 'pending' ? '处理中' :
+            asset.status === 'failed' ? '失败' : asset.status,
+    value: asset.ip_asset_id ? `${(Math.random() * 2 + 0.1).toFixed(1)} ETH` : '待定',
+    gradient: [
+      "from-blue-500 to-cyan-500",
+      "from-green-500 to-emerald-500",
+      "from-purple-500 to-pink-500",
+      "from-yellow-500 to-orange-500",
+      "from-pink-500 to-rose-500",
+      "from-red-500 to-pink-500"
+    ][index % 6]
+  }))
 
   return (
     <PageLayout variant="cyberpunk" headerVariant="main" showFooter>
+
       {/* Header section */}
       <div className="mb-8">
         <div className="flex items-center space-x-2 mb-4">

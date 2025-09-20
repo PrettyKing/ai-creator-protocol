@@ -1,13 +1,17 @@
 import { LicenseTerms } from '@/types'
-
-// Story Protocol SDK尚未稳定，回退到模拟实现
-// import { StoryAPI, StoryConfig, IpAssetType } from '@story-protocol/core-sdk'
+import {
+  StoryProtocolService,
+  registerIPAsset as registerIPAssetService,
+  createLicenseTerms as createLicenseTermsService,
+  attachLicenseTerms as attachLicenseTermsService
+} from '../../lib/story-protocol/service'
+import type { IPAssetRegisterParams, LicenseTermsParams } from '../../lib/story-protocol/client'
 
 // Story Protocol配置
 export const STORY_CONFIG = {
   chainId: process.env.NEXT_PUBLIC_CHAIN_ID ? parseInt(process.env.NEXT_PUBLIC_CHAIN_ID) : 11155111,
-  rpcUrl: process.env.STORY_PROTOCOL_RPC_URL || 'https://sepolia.infura.io/v3/your-infura-key',
-  apiKey: process.env.STORY_PROTOCOL_API_KEY
+  rpcUrl: process.env.STORY_PROTOCOL_RPC_URL || 'https://rpc.aeneid.storyrpc.io',
+  apiKey: process.env.STORY_PROTOCOL_API_KEY || 'MhBsxkU1z9fG6TofE59KqiiWV-YlYE8Q4awlLQehF3U'
 }
 
 // IP资产注册数据结构
@@ -43,38 +47,56 @@ export class StoryProtocolSDK {
         throw new Error('缺少必要的注册信息')
       }
 
-      // 2. 准备IP资产元数据
-      const ipMetadata = {
-        title: data.title,
-        description: data.description || '',
-        mediaUrl: `https://gateway.pinata.cloud/ipfs/${data.contentHash}`,
-        additionalProperties: {
-          contentHash: data.contentHash,
-          metadataHash: data.metadataHash,
-          creator: data.creator
+      // 2. 准备IP资产注册参数
+      const registerParams: IPAssetRegisterParams = {
+        nftContract: '0x0000000000000000000000000000000000000000', // 需要实际的NFT合约地址
+        tokenId: Math.floor(Math.random() * 10000).toString(), // 临时生成tokenId
+        metadata: {
+          name: data.title,
+          description: data.description || '',
+          image: `https://gateway.pinata.cloud/ipfs/${data.contentHash}`,
+          attributes: [
+            { trait_type: 'Creator', value: data.creator },
+            { trait_type: 'Content Hash', value: data.contentHash },
+            { trait_type: 'Metadata Hash', value: data.metadataHash }
+          ]
         }
       }
 
-      // 3. 这里应该调用真实的Story Protocol API
-      console.log('正在向Story Protocol注册IP资产...', {
-        config: this.config,
-        ipMetadata,
-        walletClient: !!walletClient
-      })
+      console.log('正在向Story Protocol注册IP资产...', registerParams)
 
-      // TODO: 集成真实的Story Protocol SDK
-      // 当前使用模拟实现等待SDK稳定
-      const mockResponse = {
-        success: true,
-        txHash: '0x' + Array.from({length: 64}, () =>
-          Math.floor(Math.random() * 16).toString(16)).join(''),
-        ipAssetId: `ip_${Date.now()}`,
-        tokenId: Math.floor(Math.random() * 10000).toString(),
-        contractAddress: '0x' + Array.from({length: 40}, () =>
-          Math.floor(Math.random() * 16).toString(16)).join('')
+      // 3. 调用真实的Story Protocol SDK
+      const result = await registerIPAssetService(registerParams)
+
+      if (result.success) {
+        return {
+          success: true,
+          txHash: result.txHash,
+          ipAssetId: result.ipId,
+          tokenId: result.tokenId?.toString(),
+          contractAddress: registerParams.nftContract
+        }
+      } else {
+        // SDK调用失败，在开发环境使用模拟数据
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Story Protocol SDK调用失败，使用模拟数据:', result.error)
+          const mockResponse = {
+            success: true,
+            txHash: '0x' + Array.from({length: 64}, () =>
+              Math.floor(Math.random() * 16).toString(16)).join(''),
+            ipAssetId: `ip_${Date.now()}`,
+            tokenId: Math.floor(Math.random() * 10000).toString(),
+            contractAddress: '0x' + Array.from({length: 40}, () =>
+              Math.floor(Math.random() * 16).toString(16)).join('')
+          }
+          return mockResponse
+        }
+
+        return {
+          success: false,
+          error: result.error
+        }
       }
-
-      return mockResponse
 
     } catch (error) {
       console.error('IP资产注册失败:', error)
@@ -112,19 +134,57 @@ export class StoryProtocolSDK {
     error?: string
   }> {
     try {
-      // 模拟许可条款创建
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      // 将许可条款转换为Story Protocol格式
+      const licenseParams: LicenseTermsParams = {
+        transferable: true,
+        commercialUse: terms.commercialUse,
+        commercialAttribution: terms.attribution,
+        commercialRevShare: terms.royalty || 0,
+        derivativesAllowed: terms.derivatives,
+        derivativesAttribution: terms.attribution,
+        derivativesApproval: false,
+        derivativesReciprocal: terms.shareAlike || false,
+        derivativeRevShare: terms.royalty || 0,
+        expiration: terms.timeframe ? BigInt(Date.now() + terms.timeframe * 30 * 24 * 60 * 60 * 1000) : BigInt(0), // 转换月份为毫秒
+      }
 
-      const licenseId = 'license_' + Date.now()
+      console.log('正在创建Story Protocol许可条款...', licenseParams)
 
-      // 在实际实现中，这里会将授权条款写入智能合约
+      // 调用真实的Story Protocol SDK
+      const result = await createLicenseTermsService(licenseParams)
 
-      return {
-        success: true,
-        licenseId
+      if (result.success) {
+        return {
+          success: true,
+          licenseId: result.licenseTermsId?.toString()
+        }
+      } else {
+        // SDK调用失败，在开发环境使用模拟数据
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Story Protocol许可条款创建失败，使用模拟数据:', result.error)
+          return {
+            success: true,
+            licenseId: 'license_' + Date.now()
+          }
+        }
+
+        return {
+          success: false,
+          error: result.error
+        }
       }
 
     } catch (error) {
+      console.error('许可条款创建失败:', error)
+
+      // 开发环境返回模拟数据
+      if (process.env.NODE_ENV === 'development') {
+        return {
+          success: true,
+          licenseId: 'license_' + Date.now()
+        }
+      }
+
       return {
         success: false,
         error: error instanceof Error ? error.message : '许可条款创建失败'

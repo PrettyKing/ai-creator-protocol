@@ -7,7 +7,14 @@
       "Bash(npm run lint)",
       "Bash(npx next lint:*)",
       "Bash(npm uninstall:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "WebFetch(domain:pinata.cloud)",
+      "WebSearch",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
